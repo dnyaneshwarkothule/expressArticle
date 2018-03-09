@@ -60,13 +60,13 @@
                     %>
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="card">
-                            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+                            <a href="/home/<%= articleData[i].ID %>"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
                             <div class="card-body">
                                 <h4 class="card-title">
-                                    <a href="#"><%= articleData[0].ID %>. <%= articleData[0].NAME %></a>
+                                    <a href="/home/<%= articleData[i].ID %>"><%= articleData[i].ID %>. <%= articleData[i].NAME %></a>
                                 </h4>
-                                <h5>Price: <%= articleData[0].PRICE %></h5>
-                                <p class="card-text">Author: <%= articleData[0].AUTHOR %></p>
+                                <h5>Price: <%= articleData[i].PRICE %></h5>
+                                <p class="card-text">Author: <%= articleData[i].AUTHOR %></p>
                             </div>
                             <div class="card-footer">
                                 <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
