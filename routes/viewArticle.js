@@ -14,8 +14,7 @@ router.get('/:ID', function(req, res, next) {
                 console.log("Sql Connection Error : "+err);
                 return next(err);
             }
-            else
-            {
+            else {
                 var getQry = ' SELECT `ID`, `NAME`, `AUTHOR`, `PRICE` FROM `article` ';
                 if (ArticleID.length>0)
                     getQry += "WHERE `ID` = ?";
