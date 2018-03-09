@@ -26,7 +26,8 @@ router.post('/', function(req, res, next) {
                 var insertData = {
                     'NAME' : reqObj.articleName,
                     'AUTHOR': reqObj.articleAuthor,
-                    'PRICE': reqObj.articlePrice
+                    'PRICE': reqObj.articlePrice,
+                    'IMG': "http://placehold.it/700x400"
                 };
 
                 var query = conn.query(queryData, insertData, function (err, result) {
@@ -35,8 +36,7 @@ router.post('/', function(req, res, next) {
                         return next(err);
                     }
                     else {
-                        console.log(result.insertId);
-                        return res.json({"ID": result.insertId});
+                        res.redirect('/home');
                     }
                 });
             }

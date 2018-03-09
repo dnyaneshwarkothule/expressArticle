@@ -14,6 +14,7 @@ var connection = require('express-myconnection');
 var index = require('./routes/index');
 var home = require('./routes/home');
 var addArticle = require('./routes/addArticle');
+var viewArticle = require('./routes/viewArticle');
 
 var app = express();
 
@@ -69,6 +70,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/home', home);
 app.use('/addArticle', addArticle);
+app.use('/viewArticle', viewArticle);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
