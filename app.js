@@ -5,10 +5,54 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var expressValidator = require('express-validator');
+var flash = require('connect-flash');
+var session = require('express-session');
+var mysql = require('mysql');
+var connection = require('express-myconnection');
+
 var index = require('./routes/index');
 var home = require('./routes/home');
+var addArticle = require('./routes/addArticle');
 
 var app = express();
+
+app.use(connection(mysql,{
+    host : 'localhost',
+    user : 'root',
+    password : '',
+    database : 'nodeDb'
+},'request'));
+
+app.use(session({
+    secret: 'adsfasdKJJHGDFJHAD@$#@#43543uJSJDHFKJSsdfs',
+    resave: true,
+    saveUninitialized: true
+}));
+
+app.use(require('connect-flash')());
+app.use(function (req,res,next) {
+    res.locals.messages = require('express-messages')(req,res);
+    next();
+});
+
+app.use(expressValidator({
+    errorFormator: function (param, msg, value) {
+        var namespace = param.split('.'),
+            root = namespace.shift(),
+            formParam = root;
+
+        while(namespace.length){
+            formParam +='['+namespace.shift()+']';
+        }
+        return {
+            param : formParam,
+            msg : msg,
+            value : value
+        };
+    }
+
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,6 +68,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/home', home);
+app.use('/addArticle', addArticle);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
