@@ -84,4 +84,108 @@ router.get('/view/:ID', function(req, res, next) {
         console.log(ex);
     }
 });
+
+router.post('/add',function (req, res,next) {
+    try {
+        var reqObj = req.body;
+        console.log(reqObj);
+
+        req.getConnection(function (err, conn) {
+            if (err) {
+                console.log('Error in database Connection');
+            }
+            else {
+                var queryData = 'INSERT INTO `article` SET ?';
+                var insertData = {
+                    'NAME' : reqObj.articleName,
+                    'AUTHOR': reqObj.articleAuthor,
+                    'PRICE': reqObj.articlePrice,
+                    'IMG': "http://placehold.it/700x400"
+                };
+
+                var query = conn.query(queryData, insertData, function (err, result) {
+                    if(err){
+                        console.error(" Sql Error : "+err);
+                        return next(err);
+                    }
+                    else {
+                        res.redirect('/article');
+                    }
+                });
+            }
+        });
+    }
+    catch (ex){
+        console.log(ex);
+    }
+});
+
+router.get('/edit/:ID', function(req, res, next) {
+    var ArticleID = req.params.ID || '';
+    try {
+        req.getConnection(function (err, conn) {
+            if(err){
+                console.log("Sql Connection Error : "+err);
+                return next(err);
+            }
+            else {
+                var getQry = ' SELECT `ID`, `NAME`, `AUTHOR`, `PRICE` FROM `article`  WHERE `ID` = ?';
+                var query = conn.query(getQry,[ArticleID],function (err, rows) {
+                    if(err){
+                        console.error("Sql Error : "+err);
+                        return next(err);
+                    }
+                    else {
+                        var articleArray = [];
+                        rows.forEach(function (articles) {
+                            articleArray.push(articles);
+                        });
+                        res.render('article/updateArticle', {
+                            title: 'Update Article',
+                            url : req.originalUrl,
+                            articleData : articleArray
+                        });
+                    }
+                });
+            }
+        });
+    }
+    catch (ex){
+        console.log(ex);
+    }
+});
+
+
+router.post('/update/:ID',function (req, res,next) {
+    var ArticleID = req.params.ID || '';
+    try {
+        var reqObj = req.body;
+        console.log(reqObj);
+
+        req.getConnection(function (err, conn) {
+            if (err) {
+                console.log('Error in database Connection');
+            }
+            else {
+                var queryData = 'UPDATE `article` SET `NAME`=?,`AUTHOR`=?,`PRICE`=? WHERE `ID`=?';
+                var updateData = [
+                    reqObj.articleName, reqObj.articleAuthor, reqObj.articlePrice, ArticleID
+                ];
+
+                var query = conn.query(queryData, updateData, function (err, result) {
+                    if(err){
+                        console.error(" Sql Error : "+err);
+                        return next(err);
+                    }
+                    else {
+                        res.redirect('/article/view/'+ArticleID);
+                    }
+                });
+            }
+        });
+    }
+    catch (ex){
+        console.log(ex);
+    }
+});
 module.exports = router;
