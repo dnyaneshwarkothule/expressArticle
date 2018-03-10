@@ -30,6 +30,7 @@ router.get('/:ID', function(req, res, next) {
                         });
                         res.render('viewArticle', {
                             title: 'View Article',
+                            url : req.originalUrl,
                             articleData : articleArray
                         });
                         console.log(articleArray);
@@ -42,6 +43,10 @@ router.get('/:ID', function(req, res, next) {
     catch (ex){
         console.log(ex);
     }
+});
+
+router.get('/update/:ID', function(req, res, next) {
+    console.log("update article")
 });
 
 module.exports = router;
